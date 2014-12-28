@@ -5,19 +5,90 @@ license that can be found in the LICENSE file.
 -->
 <link rel="import" href="../polymer/polymer.html">
 
-<polymer-element name="polymer-cookie" attributes="name value expires secure domain path max-age">
-  <template>
-    <style>
-      :host { display: none; }
-    </style>
-  </template>
+<!--
+The `polymer-cookie` element can be used to set and read cookies.
+
+You should have one `polymer-cookie` element per cookie you want to use,
+defined by its `name` property.
+You can then read the `value` of the cookie, or save the cookie by setting
+the `value` attribute or explicitely calling the `save` method.
+
+##### Example
+
+    <polymer-cookie name="mycookie"></polymer-cookie>
+
+@element polymer-cookie
+@blurb Element to set and read cookie values
+@status alpha
+@homepage github.io
+-->
+<polymer-element name="polymer-cookie" hidden attributes="name value expires secure domain path max-age">
   <script>
     (function() {
       var EXPIRE_NOW = 'Thu, 01 Jan 1970 00:00:00 GMT';
       var FOREVER = 'Fri, 31 Dec 9999 23:59:59 GMT';
       var cookieProps = ['expires', 'secure', 'max-age', 'domain', 'path'];
       Polymer('polymer-cookie', {
+        /**
+         * Name of the cookie
+         *
+         * @attribute name
+         * @type string
+         */
+         
+        /**
+         * Value of the cookie
+         *
+         * @attribute value
+         * @type string
+         */
+        
+        /**
+         * Expiry-date of the cookie as UTC/GMT-formatted String.
+         *
+         * Example: `"Sun, 15 Jul 2012 00:00:01 GMT"`
+         *
+         * @attribute expires
+         * @type string
+         * @default never
+         */
         expires: FOREVER,
+        
+        /**
+         * If true, cookie will only be transmitted over secure protocol as https
+         *
+         * @attribute secure
+         * @type boolean
+         * @default false
+         */
+        secure: false,
+         
+        /**
+         * The domain from where the cookie will be readable.
+         * E.g., "example.com", ".example.com" (includes all subdomains)
+         * or "subdomain.example.com"; if not specified, defaults to the
+         * host portion of the current document location
+         *
+         * @attribute domain
+         * @type string
+         */
+         
+        /**
+         * The path from where the cookie will be readable.
+         * E.g., "/", "/mydir"; if not specified, defaults to the current
+         * path of the current document location.
+         *
+         * @attribute path
+         * @type string
+         */
+         
+        /**
+         * The maximum age of the cookie in seconds.
+         *
+         * @attribute max-age
+         * @type number
+         */
+        
         ready: function() {
           this.load();
         },
@@ -37,32 +108,34 @@ license that can be found in the LICENSE file.
           var kv = this.parseCookie();
           this.value = kv && kv.value;
         },
-        valueChanged: function() {
-          this.expire = FOREVER;
-          this.save();
+
+        observe: {
+          value: 'save',
+          expires: 'save',
+          secure: 'save',
+          domain: 'save',
+          path: 'save',
+          maxAge: 'save'
         },
-        // TODO(dfreedman): collapse these when 'multiple props -> single change function' exists in Polymer
-        expiresChanged: function() {
-          this.save();
-        },
-        secureChanged: function() {
-          this.save();
-        },
-        domainChanged: function() {
-          this.save();
-        },
-        pathChanged: function() {
-          this.save();
-        },
-        maxAgeChanged: function() {
-          this.save();
-        },
+        
+        /**
+         * Returns true if the cookie is currently set.
+         *
+         * @method isCookieStored
+         */
         isCookieStored: function() {
           return Boolean(this.parseCookie());
         },
+        
+        /**
+         * Deletes the cookie.
+         *
+         * @method deleteCookie
+         */
         deleteCookie: function() {
           this.expires = EXPIRE_NOW;
         },
+
         prepareProperties: function() {
           var prepared = '';
           for (var i = 0, k; i < cookieProps.length; i++) {
@@ -73,7 +146,13 @@ license that can be found in the LICENSE file.
           }
           return prepared;
         },
-        save: function() {
+        
+        /**
+         * Sets the cookie with the currently defined parameters.
+         *
+         * @method save
+         */
+       save: function() {
           document.cookie = escape(this.name) + '=' + escape(this.value) + this.prepareProperties();
         }
       });

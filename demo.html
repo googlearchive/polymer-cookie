@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>polymer-cookie Demo</title>
+
+  <script src="../webcomponentsjs/webcomponents.min.js"></script>
+  <link rel="import" href="polymer-cookie.html">
+
+</head>
+<body unresolved>
+
+  <p>An example of using <code>&lt;polymer-cookie></code>:</p>
+
+  <polymer-cookie name="mycookie" id="cookie"></polymer-cookie>
+
+  <button id="set">Set cookie</button>
+  <button id="delete">Delete cookie</button><br><br>
+  
+  Cookies: <span id="cookieInfo"></span><br><br>
+  
+  <script>
+    (function (win, doc) {
+      
+      function updateCookieInfo() {
+        doc.getElementById('cookieInfo').textContent = doc.cookie;
+      }
+      
+      doc.getElementById('delete').onclick = function () {
+        doc.getElementById('cookie').deleteCookie();
+        win.setTimeout(updateCookieInfo, 1);
+      };
+      doc.getElementById('set').onclick = function () {
+        doc.getElementById('cookie').value = 'yummy';
+        doc.getElementById('cookie').expires = 'Fri, 31 Dec 9999 23:59:59 GMT';
+        win.setTimeout(updateCookieInfo, 1);
+      };
+      
+      win.addEventListener('polymer-ready', updateCookieInfo);
+    }(this, this.document));
+  </script>
+
+</body>
+</html>
