@@ -108,15 +108,6 @@ the `value` attribute or explicitely calling the `save` method.
           var kv = this.parseCookie();
           this.value = kv && kv.value;
         },
-
-        observe: {
-          value: 'save',
-          expires: 'save',
-          secure: 'save',
-          domain: 'save',
-          path: 'save',
-          maxAge: 'save'
-        },
         
         /**
          * Returns true if the cookie is currently set.
