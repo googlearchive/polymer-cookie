@@ -153,7 +153,7 @@ the `value` attribute or explicitely calling the `save` method.
          * @method save
          */
        save: function() {
-          if (this.value !== undefined)
+          if (this.value !== undefined && this.value !== null)
             document.cookie = escape(this.name) + '=' + escape(this.value) + this.prepareProperties();
         }
       });
