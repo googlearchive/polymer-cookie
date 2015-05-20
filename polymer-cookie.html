@@ -30,20 +30,7 @@ the `value` attribute or explicitely calling the `save` method.
       var cookieProps = ['expires', 'secure', 'max-age', 'domain', 'path'];
       
       Polymer({
-        /**
-         * Name of the cookie
-         *
-         * @attribute name
-         * @type string
-         */
-         
-        /**
-         * Value of the cookie
-         *
-         * @attribute value
-         * @type string
-         */
-        
+            
         is: 'polymer-cookie',
 
         hostAttributes: {
@@ -51,33 +38,87 @@ the `value` attribute or explicitely calling the `save` method.
         },
 
         properties: {
+            /**
+             * Name of the cookie
+             *
+             * @attribute name
+             * @type string
+             */
             name: {
-                type: String,
-                readOnly: false
+                type: String
             },
+
+            /**
+             * Value of the cookie
+             *
+             * @attribute value
+             * @type string
+             */
             value: {
-                type: String,
-                readOnly: false
+                type: String
             },
+
+            /**
+             * Expiry-date of the cookie as UTC/GMT-formatted String.
+             *
+             * Example: `"Sun, 15 Jul 2012 00:00:01 GMT"`
+             *
+             * @attribute expires
+             * @type string
+             * @default never
+             */
             expires: {
                 type: String,
-                readOnly: false
+                value: FOREVER
             },
+
+            /**
+             * If true, cookie will only be transmitted over secure protocol as https
+             *
+             * @attribute secure
+             * @type boolean
+             * @default false
+             */
             secure: {
                 type: Boolean,
-                readOnly: false
+                value: false
             },
+
+            /**
+             * The domain from where the cookie will be readable.
+             * E.g., "example.com", ".example.com" (includes all subdomains)
+             * or "subdomain.example.com"; if not specified, defaults to the
+             * host portion of the current document location
+             *
+             * @attribute domain
+             * @type string
+             */
             domain: {
-                type: String,
-                readOnly: false
+                type: String
             },
+
+            /**
+             * The path from where the cookie will be readable.
+             * E.g., "/", "/mydir"; if not specified, defaults to the current
+             * path of the current document location.
+             *
+             * @attribute path
+             * @type string
+             */
             path: {
                 type: String,
-                readOnly: false
+                value: '/'
             },
+
+            /**
+             * The maximum age of the cookie in seconds.
+             *
+             * @attribute max-age
+             * @type number
+             */
             maxAge: {
                 type: Number,
-                readOnly: false
+                value: null
             }
         },
 
@@ -85,51 +126,6 @@ the `value` attribute or explicitely calling the `save` method.
             'save(value, expires, secure, domain, path, maxAge)'
         ],
 
-        /**
-         * Expiry-date of the cookie as UTC/GMT-formatted String.
-         *
-         * Example: `"Sun, 15 Jul 2012 00:00:01 GMT"`
-         *
-         * @attribute expires
-         * @type string
-         * @default never
-         */
-        expires: FOREVER,
-        
-        /**
-         * If true, cookie will only be transmitted over secure protocol as https
-         *
-         * @attribute secure
-         * @type boolean
-         * @default false
-         */
-        secure: false,
-         
-        /**
-         * The domain from where the cookie will be readable.
-         * E.g., "example.com", ".example.com" (includes all subdomains)
-         * or "subdomain.example.com"; if not specified, defaults to the
-         * host portion of the current document location
-         *
-         * @attribute domain
-         * @type string
-         */
-         
-        /**
-         * The path from where the cookie will be readable.
-         * E.g., "/", "/mydir"; if not specified, defaults to the current
-         * path of the current document location.
-         *
-         * @attribute path
-         * @type string
-         */
-         
-        /**
-         * The maximum age of the cookie in seconds.
-         *
-         * @attribute max-age
-         * @type number
-         */
         
         ready: function() {
           this.load();
@@ -192,3 +188,4 @@ the `value` attribute or explicitely calling the `save` method.
     })();
   </script>
 </dom-element>
+
