@@ -51,13 +51,34 @@ the `value` attribute or explicitely calling the `save` method.
         },
 
         properties: {
-            name: String,
-            value: String,
-            expires: String,
-            secure: Boolean,
-            domain: String,
-            path: String,
-            maxAge: Number
+            name: {
+                type: String,
+                readOnly: false
+            },
+            value: {
+                type: String,
+                readOnly: false
+            },
+            expires: {
+                type: String,
+                readOnly: false
+            },
+            secure: {
+                type: Boolean,
+                readOnly: false
+            },
+            domain: {
+                type: String,
+                readOnly: false
+            },
+            path: {
+                type: String,
+                readOnly: false
+            },
+            maxAge: {
+                type: Number,
+                readOnly: false
+            }
         },
 
         observers: [
