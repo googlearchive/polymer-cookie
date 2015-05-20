@@ -22,12 +22,13 @@ the `value` attribute or explicitely calling the `save` method.
 @status alpha
 @homepage github.io
 -->
-<dom-module id="polymer-cookie" hidden attributes="name value expires secure domain path max-age">
+<dom-module id="polymer-cookie">
   <script>
     (function() {
       var EXPIRE_NOW = 'Thu, 01 Jan 1970 00:00:00 GMT';
       var FOREVER = 'Fri, 31 Dec 9999 23:59:59 GMT';
       var cookieProps = ['expires', 'secure', 'max-age', 'domain', 'path'];
+      
       Polymer({
         /**
          * Name of the cookie
@@ -43,7 +44,25 @@ the `value` attribute or explicitely calling the `save` method.
          * @type string
          */
         
-		is: 'polymer-cookie',
+        is: 'polymer-cookie',
+
+        hostAttributes: {
+            hidden: true
+        },
+
+        properties: {
+            name: String,
+            value: String,
+            expires: String,
+            secure: Boolean,
+            domain: String,
+            path: String,
+            maxAge: Number
+        },
+
+        observers: [
+            'save(value, expires, secure, domain, path, maxAge)'
+        ],
 
         /**
          * Expiry-date of the cookie as UTC/GMT-formatted String.
@@ -111,15 +130,6 @@ the `value` attribute or explicitely calling the `save` method.
           this.value = kv && kv.value;
         },
 
-        observe: {
-          value: 'save',
-          expires: 'save',
-          secure: 'save',
-          domain: 'save',
-          path: 'save',
-          maxAge: 'save'
-        },
-        
         /**
          * Returns true if the cookie is currently set.
          *
