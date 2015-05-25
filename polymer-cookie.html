@@ -7,16 +7,12 @@ license that can be found in the LICENSE file.
 
 <!--
 The `polymer-cookie` element can be used to set and read cookies.
-
 You should have one `polymer-cookie` element per cookie you want to use,
 defined by its `name` property.
 You can then read the `value` of the cookie, or save the cookie by setting
 the `value` attribute or explicitely calling the `save` method.
-
 ##### Example
-
     <polymer-cookie name="mycookie"></polymer-cookie>
-
 @element polymer-cookie
 @blurb Element to set and read cookie values
 @status alpha
@@ -108,7 +104,6 @@ the `value` attribute or explicitely calling the `save` method.
           var kv = this.parseCookie();
           this.value = kv && kv.value;
         },
-
         observe: {
           value: 'save',
           expires: 'save',
@@ -135,7 +130,6 @@ the `value` attribute or explicitely calling the `save` method.
         deleteCookie: function() {
           this.expires = EXPIRE_NOW;
         },
-
         prepareProperties: function() {
           var prepared = '';
           for (var i = 0, k; i < cookieProps.length; i++) {
