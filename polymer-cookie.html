@@ -22,26 +22,37 @@ the `value` attribute or explicitely calling the `save` method.
 @status alpha
 @homepage github.io
 -->
-<polymer-element name="polymer-cookie" hidden attributes="name value expires secure domain path max-age">
-  <script>
-    (function() {
-      var EXPIRE_NOW = 'Thu, 01 Jan 1970 00:00:00 GMT';
-      var FOREVER = 'Fri, 31 Dec 9999 23:59:59 GMT';
-      var cookieProps = ['expires', 'secure', 'max-age', 'domain', 'path'];
-      Polymer('polymer-cookie', {
+
+<script>
+  (function() {
+    var EXPIRE_NOW = 'Thu, 01 Jan 1970 00:00:00 GMT';
+    var FOREVER = 'Fri, 31 Dec 9999 23:59:59 GMT';
+    var cookieProps = ['expires', 'secure', 'max-age', 'domain', 'path'];
+    Polymer({
+      is: 'polymer-cookie',
+      properties: {
         /**
          * Name of the cookie
          *
          * @attribute name
          * @type string
          */
-         
+        name: {
+          type: String,
+          observer: 'save'
+        },
+       
         /**
          * Value of the cookie
          *
          * @attribute value
          * @type string
          */
+        value: {
+          type: String,
+          notify: true,
+          observer: 'save'
+        },
         
         /**
          * Expiry-date of the cookie as UTC/GMT-formatted String.
@@ -52,7 +63,11 @@ the `value` attribute or explicitely calling the `save` method.
          * @type string
          * @default never
          */
-        expires: FOREVER,
+        expires: {
+          type: String,
+          value: FOREVER,
+          observer: 'save'
+        },
         
         /**
          * If true, cookie will only be transmitted over secure protocol as https
@@ -61,8 +76,12 @@ the `value` attribute or explicitely calling the `save` method.
          * @type boolean
          * @default false
          */
-        secure: false,
-         
+        secure: {
+          type: Boolean,
+          value: false,
+          observer: 'save'
+        },
+        
         /**
          * The domain from where the cookie will be readable.
          * E.g., "example.com", ".example.com" (includes all subdomains)
@@ -72,7 +91,11 @@ the `value` attribute or explicitely calling the `save` method.
          * @attribute domain
          * @type string
          */
-         
+        domain: {
+          type: String,
+          observer: 'save'
+        },
+        
         /**
          * The path from where the cookie will be readable.
          * E.g., "/", "/mydir"; if not specified, defaults to the current
@@ -81,81 +104,85 @@ the `value` attribute or explicitely calling the `save` method.
          * @attribute path
          * @type string
          */
-         
+        path: {
+          type: String,
+          observer: 'save'
+        },
+        
         /**
          * The maximum age of the cookie in seconds.
          *
-         * @attribute max-age
+         * @attribute maxAge
          * @type number
          */
-        
-        ready: function() {
-          this.load();
-        },
-        parseCookie: function() {
-          var pairs = document.cookie.split(/\s*;\s*/);
-          var map = pairs.map(function(kv) {
-            var eq = kv.indexOf('=');
-            return {
-              name: unescape(kv.slice(0, eq)),
-              value: unescape(kv.slice(eq + 1))
-            };
-          });
-          var nom = this.name;
-          return map.filter(function(kv){ return kv.name === nom; })[0];
-        },
-        load: function() {
-          var kv = this.parseCookie();
-          this.value = kv && kv.value;
-        },
-
-        observe: {
-          value: 'save',
-          expires: 'save',
-          secure: 'save',
-          domain: 'save',
-          path: 'save',
-          maxAge: 'save'
-        },
-        
-        /**
-         * Returns true if the cookie is currently set.
-         *
-         * @method isCookieStored
-         */
-        isCookieStored: function() {
-          return Boolean(this.parseCookie());
-        },
-        
-        /**
-         * Deletes the cookie.
-         *
-         * @method deleteCookie
-         */
-        deleteCookie: function() {
-          this.expires = EXPIRE_NOW;
-        },
-
-        prepareProperties: function() {
-          var prepared = '';
-          for (var i = 0, k; i < cookieProps.length; i++) {
-            k = cookieProps[i];
-            if (this[k]) {
-              prepared += (';' + k + '=' + this[k]);
-            }
-          }
-          return prepared;
-        },
-        
-        /**
-         * Sets the cookie with the currently defined parameters.
-         *
-         * @method save
-         */
-       save: function() {
-          document.cookie = escape(this.name) + '=' + escape(this.value) + this.prepareProperties();
+        maxAge: {
+          type: Number,
+          observer: 'save'
         }
-      });
-    })();
-  </script>
-</polymer-element>
+      },
+      
+      ready: function() {
+        this._load();
+      },
+
+      _parseCookie: function() {
+        var pairs = document.cookie.split(/\s*;\s*/);
+        var map = pairs.map(function(kv) {
+          var eq = kv.indexOf('=');
+          return {
+            name: unescape(kv.slice(0, eq)),
+            value: unescape(kv.slice(eq + 1))
+          };
+        });
+        var nom = this.name;
+        return map.filter(function(kv){ return kv.name === nom; })[0];
+      },
+
+      _load: function() {
+        var kv = this._parseCookie();
+        this.value = kv && kv.value;
+      },
+      
+      /**
+       * Returns true if the cookie is currently set.
+       *
+       * @method isCookieStored
+       */
+      isCookieStored: function() {
+        return Boolean(this._parseCookie());
+      },
+      
+      /**
+       * Deletes the cookie.
+       *
+       * @method deleteCookie
+       */
+      deleteCookie: function() {
+        this.expires = EXPIRE_NOW;
+      },
+
+      _prepareProperties: function() {
+        var prepared = '';
+        for (var i = 0, k; i < cookieProps.length; i++) {
+          k = cookieProps[i];
+          if (this[k]) {
+            prepared += (';' + k + '=' + this[k]);
+          }
+        }
+        return prepared;
+      },
+      
+      /**
+       * Sets the cookie with the currently defined parameters.
+       *
+       * @method save
+       */
+     save: function() {
+        if (this.name && this.value) {
+          console.log(this);
+          document.cookie = escape(this.name) + '=' + escape(this.value) + this._prepareProperties();
+        }
+      }
+    });
+  })();
+</script>
