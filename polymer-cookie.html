@@ -179,7 +179,6 @@ the `value` attribute or explicitely calling the `save` method.
        */
      save: function() {
         if (this.name && this.value) {
-          console.log(this);
           document.cookie = escape(this.name) + '=' + escape(this.value) + this._prepareProperties();
         }
       }
