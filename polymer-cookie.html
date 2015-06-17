@@ -22,65 +22,79 @@ the `value` attribute or explicitely calling the `save` method.
 @status alpha
 @homepage github.io
 -->
-<polymer-element name="polymer-cookie" hidden attributes="name value expires secure domain path max-age">
+<dom-module id="polymer-cookie">
   <script>
     (function() {
       var EXPIRE_NOW = 'Thu, 01 Jan 1970 00:00:00 GMT';
       var FOREVER = 'Fri, 31 Dec 9999 23:59:59 GMT';
       var cookieProps = ['expires', 'secure', 'max-age', 'domain', 'path'];
-      Polymer('polymer-cookie', {
-        /**
-         * Name of the cookie
-         *
-         * @attribute name
-         * @type string
-         */
-         
-        /**
-         * Value of the cookie
-         *
-         * @attribute value
-         * @type string
-         */
+      Polymer({
+        is: 'polymer-cookie',
         
-        /**
-         * Expiry-date of the cookie as UTC/GMT-formatted String.
-         *
-         * Example: `"Sun, 15 Jul 2012 00:00:01 GMT"`
-         *
-         * @attribute expires
-         * @type string
-         * @default never
-         */
-        expires: FOREVER,
-        
-        /**
-         * If true, cookie will only be transmitted over secure protocol as https
-         *
-         * @attribute secure
-         * @type boolean
-         * @default false
-         */
-        secure: false,
-         
-        /**
-         * The domain from where the cookie will be readable.
-         * E.g., "example.com", ".example.com" (includes all subdomains)
-         * or "subdomain.example.com"; if not specified, defaults to the
-         * host portion of the current document location
-         *
-         * @attribute domain
-         * @type string
-         */
-         
-        /**
-         * The path from where the cookie will be readable.
-         * E.g., "/", "/mydir"; if not specified, defaults to the current
-         * path of the current document location.
-         *
-         * @attribute path
-         * @type string
-         */
+        properties: {
+          /**
+           * Name of the cookie
+           *
+           * @attribute name
+           * @type string
+           */
+          name: String,
+          
+          /**
+           * Value of the cookie
+           *
+           * @attribute value
+           * @type string
+           */
+          value: String,
+          
+          /**
+           * Expiry-date of the cookie as UTC/GMT-formatted String.
+           *
+           * Example: `"Sun, 15 Jul 2012 00:00:01 GMT"`
+           *
+           * @attribute expires
+           * @type string
+           * @default never
+           */
+          expires: {
+            type: String,
+            value: FOREVER,
+          },
+          
+           /**
+           * If true, cookie will only be transmitted over secure protocol as https
+           *
+           * @attribute secure
+           * @type boolean
+           * @default false
+           */     
+          secure: {
+            type: Boolean,
+            value: false,
+          },
+          
+           /**
+           * The domain from where the cookie will be readable.
+           * E.g., "example.com", ".example.com" (includes all subdomains)
+           * or "subdomain.example.com"; if not specified, defaults to the
+           * host portion of the current document location
+           *
+           * @attribute domain
+           * @type string
+           */
+          domain: String,
+          
+           /**
+           * The path from where the cookie will be readable.
+           * E.g., "/", "/mydir"; if not specified, defaults to the current
+           * path of the current document location.
+           *
+           * @attribute path
+           * @type string
+           */
+          path: String,
+        },
          
         /**
          * The maximum age of the cookie in seconds.
@@ -109,14 +123,9 @@ the `value` attribute or explicitely calling the `save` method.
           this.value = kv && kv.value;
         },
 
-        observe: {
-          value: 'save',
-          expires: 'save',
-          secure: 'save',
-          domain: 'save',
-          path: 'save',
-          maxAge: 'save'
-        },
+        observers: [
+          'save(value, expires, secure, domain, path, maxAge)',
+        ],
         
         /**
          * Returns true if the cookie is currently set.
@@ -159,4 +168,4 @@ the `value` attribute or explicitely calling the `save` method.
       });
     })();
   </script>
-</polymer-element>
+</dom-module>
