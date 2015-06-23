@@ -2,6 +2,6 @@
   "name": "polymer-cookie",
   "version": "1.0.0",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0"
   }
 }
