@@ -1,0 +1,62 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../polymer-cookie.html">
+</head>
+
+<body>
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <polymer-cookie name="mycookie" id="cookie"></polymer-cookie>
+    <script>
+    var myEl = document.querySelector('polymer-cookie');
+
+    function getItem(sKey) {
+        if (!sKey) {
+            return null;
+        }
+        return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
+    }
+
+    suite('<polymer-cookie>', function() {
+
+        test('should set the cookie', function() {
+
+            var expected = 'yummy';
+
+            myEl.value = 'yummy';
+            myEl.expires = 'Fri, 31 Dec 9999 23:59:59 GMT';
+
+            assert.equal(getItem('mycookie'), expected);
+
+        });
+
+        test('should check if the cookie exist', function() {
+            assert.equal(myEl.isCookieStored(), true);
+        });
+
+        test('should remove the cookie', function() {
+            myEl.deleteCookie();
+            assert.equal(getItem('mycookie'), undefined);
+        });
+
+
+    });
+    </script>
+</body>
+
+</html>
